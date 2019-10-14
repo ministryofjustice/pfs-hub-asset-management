@@ -1,32 +1,32 @@
-const Article = require("./models/article");
+const assetRegister = require("./models/asset-register");
 
-const getInsertedArticle = async id => {
-  console.log("\nNow get the article from the db\n");
-  const article = await Article.where("id", id).fetch();
-  return article;
+const getInsertedRecord = async id => {
+  console.log("\nNow retrieve the record from the db\n");
+  const record = await assetRegister.where("id", id).fetch();
+  return record;
 };
 
-updateInsertedArticle = async (id, update) => {
+updateInsertedRecord = async (id, update) => {
   try {
-    const result = await getInsertedArticle(id);
+    const result = await getInsertedRecord(id);
     if (result) {
         result.set(update).save();
-        console.log('DONE!');
+        console.log('Record updated!');
     }
   } catch (e) {
     console.error(`Failed to save record: ${e.message}`);
   }
 };
 
-const deleteInsertedArticle = async id => {
-  console.log("\nNow delete the article from the db\n");
-  const article = await Article.where("id", id).destroy();
-  return article;
+const deleteInsertedRecord = async id => {
+  console.log("\nDelete the record from the db\n");
+  const record = await assetRegister.where("id", id).destroy();
+  return record;
 };
 
-var insertArticle = async ({ serialNumber }) => {
-  // create a new entry in articles database
-  const saved = await new Article({
+var insertRecord = async ({ serialNumber }) => {
+  // create a new entry in asset register database
+  const saved = await new assetRegister({
     model: "pro",
     make: "mac",
     serial_number: serialNumber
@@ -37,10 +37,8 @@ var insertArticle = async ({ serialNumber }) => {
   return insertedId;
 };
 
-// insert the article, and when we are done, destroy connection and get the inserted article
-// insertArticle({ serialNumber: "MATTFIZ333" }).then(() =>
-//   bookshelf.knex.destroy()
-// );
-// getInsertedArticle(2).then(article => console.log(JSON.stringify(article)));
-// deleteInsertedArticle(1).then(article => console.log(JSON.stringify(article)));
-updateInsertedArticle(2, {serial_number: "LUCASISAWESOME12345"});
+// insert the new record, and when we are done, destroy connection and get the inserted record
+insertRecord({ serialNumber: "leejeffery" });
+// getInsertedRecord(7).then(record => console.log(JSON.stringify(record)));
+// deleteInsertedRecord(2).then(record => console.log(JSON.stringify(record)));
+// updateInsertedRecord(2, {serial_number: "LUCASISAMAZING12345"});
