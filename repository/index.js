@@ -1,27 +1,26 @@
-module.exports = function assetRepository(assetRegister) {
+module.exports = function assetRepository(assetRegister, helpers) {
+  const { logger } = helpers;  
 
   const fetch = async id => {
-    console.log("\nNow retrieve the record from the db\n");
+    logger.info("\nNow retrieve the record from the db\n");
     const record = await assetRegister.where("id", id).fetch();
     return record;
   };
 
   const update = async (id, update) => {
     try {
-      const result = await fetch(id);
-      if (result) {
-        result.set(update).save();
-        console.log("Record updated!");
-      }
+      const record = await fetch(id);
+      record.set(update).save();
+      logger.info("Record updated!");
     } catch (e) {
-      console.error(`Failed to save record: ${e.message}`);
+      logger.error(`Failed to save record: ${e.message}`);
     }
   };
 
   const remove = async id => {
     const record = await assetRegister.where("id", id).destroy();
-    console.log(`Deleted record ${id} from the database\n`);
-    return (record);
+    logger.info(`Deleted record ${id} from the database\n`);
+    return record;
   };
 
   const insert = async ({ model, make, serialNumber }) => {
@@ -31,16 +30,16 @@ module.exports = function assetRepository(assetRegister) {
       make: make,
       serial_number: serialNumber
     }).save();
-    console.log(saved);
+    logger.info(saved);
     const insertedId = saved.attributes.id;
 
     return insertedId;
-  };  
+  };
 
   return {
-      fetch,
-      update,
-      remove,
-      insert
-  }
+    fetch,
+    update,
+    remove,
+    insert
+  };
 };
