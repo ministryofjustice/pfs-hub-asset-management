@@ -1,5 +1,5 @@
 const createRepo = require('../repository');
-const helpers = require('../helpers');
+const helpers = require('../../helpers');
 
 describe('Name of the group', () => {
     const fetch = jest.fn();
@@ -45,7 +45,7 @@ describe('Name of the group', () => {
         expect(destroy).toHaveBeenCalled();
     });
 
-    it('should amend a record from the database', async () => {
+    it('should update a record from the database', async () => {
         const mockData = "MOCK";
         const save = jest.fn();
         const set = jest.fn(() => ({ save }));
@@ -69,7 +69,7 @@ describe('Name of the group', () => {
         expect(save).not.toHaveBeenCalled();
     });
 
-    it('should insert a record in the database', async () => {
+    it('should insert a record into the database', async () => {
         const mockData = {model: "MODEL", make: "MAKE", serialNumber: "SN"};
         const id = await repo.insert(mockData);
         expect(hasBeenConstructed).toHaveBeenCalledWith({model: "MODEL", make: "MAKE", serial_number: "SN"});
