@@ -1,4 +1,4 @@
-module.exports = function assetRepository(assetRegister, helpers) {
+module.exports = function (assetRegister, helpers) {
   const { logger } = helpers;  
 
   const fetch = async id => {
@@ -7,14 +7,10 @@ module.exports = function assetRepository(assetRegister, helpers) {
     return record;
   };
 
-  const update = async (id, update) => {
-    try {
+  const update = async (id, update) => {    
       const record = await fetch(id);
       record.set(update).save();
       logger.info("Record updated!");
-    } catch (e) {
-      logger.error(`Failed to save record: ${e.message}`);
-    }
   };
 
   const remove = async id => {
@@ -23,12 +19,12 @@ module.exports = function assetRepository(assetRegister, helpers) {
     return record;
   };
 
-  const insert = async ({ model, make, serialNumber }) => {
+  const insert = async ({ model, make, serial_number }) => {
     // create a new entry in asset register database
     const saved = await new assetRegister({
-      model: model,
-      make: make,
-      serial_number: serialNumber
+      model,
+      make,
+      serial_number
     }).save();
     logger.info(saved);
     const insertedId = saved.attributes.id;

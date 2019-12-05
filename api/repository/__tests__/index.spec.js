@@ -1,5 +1,5 @@
-const createRepo = require('../repository');
-const helpers = require('../../helpers');
+const createRepo = require('../../repository');
+const helpers = require('../../../helpers');
 
 describe('Name of the group', () => {
     const fetch = jest.fn();
@@ -63,14 +63,21 @@ describe('Name of the group', () => {
         const mockData = "MOCK_UPDATE";
         const save = jest.fn();
         const set = jest.fn(() => ({ save }));
-        fetch.mockRejectedValue(new Error("BOOM!"));
-        await repo.update(1, mockData);
-        expect(set).not.toHaveBeenCalled();
-        expect(save).not.toHaveBeenCalled();
+        let didThrow = false;
+        try {
+            fetch.mockRejectedValue(new Error("BOOM!"));
+            await repo.update(1, mockData);
+        } catch (e) {
+            didThrow = true;
+        } finally {
+            expect(didThrow).toEqual(true);
+            expect(set).not.toHaveBeenCalled();
+            expect(save).not.toHaveBeenCalled();
+        }
     });
 
     it('should insert a record into the database', async () => {
-        const mockData = {model: "MODEL", make: "MAKE", serialNumber: "SN"};
+        const mockData = {model: "MODEL", make: "MAKE", serial_number: "SN"};
         const id = await repo.insert(mockData);
         expect(hasBeenConstructed).toHaveBeenCalledWith({model: "MODEL", make: "MAKE", serial_number: "SN"});
         expect(id).toEqual(1234);
