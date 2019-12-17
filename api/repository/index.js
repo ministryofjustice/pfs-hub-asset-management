@@ -19,12 +19,17 @@ module.exports = function (assetRegister, helpers) {
     return record;
   };
 
-  const insert = async ({ model, make, serial_number }) => {
+  const insert = async ({ asset_number, model, make, serial_number, asset_status, build, nomis_id}) => {
     // create a new entry in asset register database
     const saved = await new assetRegister({
+      asset_number,
       model,
       make,
-      serial_number
+      serial_number,
+      asset_status,
+      build,
+      nomis_id,
+
     }).save();
     logger.info(saved);
     const insertedId = saved.attributes.id;
