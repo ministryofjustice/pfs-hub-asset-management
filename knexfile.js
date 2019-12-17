@@ -7,14 +7,14 @@ module.exports = {
         host: 'localhost',
         database: 'postgres',
         user:     'postgres',
-        password: 'asset'
+        password: 'postgres'
       },
       pool: {
         min: 2,
         max: 10
       },
       migrations: {
-        tableName: 'digital_prison_assets'
+        tableName: 'digital_prison_assets_migrations'
       }
     },
    
@@ -24,14 +24,14 @@ module.exports = {
         host: 'localhost',
         database: 'postgres',
         user:     'postgres',
-        password: 'asset'
+        password: 'postgres'
       },
       pool: {
         min: 2,
         max: 10
       },
       migrations: {
-        tableName: 'digital_prison_assets'
+        tableName: 'digital_prison_assets_migrations'
       }
     },
   };

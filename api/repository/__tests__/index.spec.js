@@ -77,9 +77,9 @@ describe('Name of the group', () => {
     });
 
     it('should insert a record into the database', async () => {
-        const mockData = {model: "MODEL", make: "MAKE", serial_number: "SN"};
+        const mockData = {model: "MODEL", make: "MAKE", serial_number: "SN", asset_number: "ASSET", asset_status: "STATUS", build: "BUILD", nomis_id: "NOMIS"};
         const id = await repo.insert(mockData);
-        expect(hasBeenConstructed).toHaveBeenCalledWith({model: "MODEL", make: "MAKE", serial_number: "SN"});
+        expect(hasBeenConstructed).toHaveBeenCalledWith({model: "MODEL", make: "MAKE", serial_number: "SN", asset_number: "ASSET", asset_status: "STATUS", build: "BUILD", nomis_id: "NOMIS"});
         expect(id).toEqual(1234);
     })
 });
