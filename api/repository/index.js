@@ -1,6 +1,12 @@
 module.exports = function (assetRegister, helpers) {
   const { logger } = helpers;  
 
+  const fetchAll = async () => {
+    logger.info("\nNow retrieving the records from the db\n");
+    const records = await assetRegister.fetchAll();
+    return records;
+  };
+
   const fetch = async id => {
     logger.info("\nNow retrieve the record from the db\n");
     const record = await assetRegister.where("id", id).fetch();
@@ -38,6 +44,7 @@ module.exports = function (assetRegister, helpers) {
   };
 
   return {
+    fetchAll,
     fetch,
     update,
     remove,

@@ -45,6 +45,15 @@ module.exports = (router, repository) => {
     }
   }
 
+  async function getAllAssets(req, res, next) {
+    try {
+      const assets = await repository.fetchAll();
+      res.json(assets);
+    } catch (error) {
+      next(`Failed to find assets: ${error}`);
+    }
+  }
+
   async function createAsset(req, res, next) {
     try {
       const id = await repository.insert(req.body);
@@ -75,10 +84,12 @@ module.exports = (router, repository) => {
     }
   }
 
+  router.get("/all", getAllAssets);
   router.get("/:id", getAsset);
   router.post("/", isValidNewAsset, createAsset);
   router.put("/:id", hasValidId, isValidAmendedAsset, updateAsset);
   router.delete("/:id", deleteAsset);
+
 
   return router;
 };
