@@ -1,15 +1,29 @@
-const schema = require("./dto/asset");
+const createAssetSchema = require("./validation/create-asset");
+const amendAssetSchema = require("./validation/amend-asset");
 
 function hasValidId(req, res, next) {
-  if (!req.body.id) {
+  if (!req.params.id) {
     return next("Must have valid ID");
   }
   next();
 }
 
-async function isValidAsset(req, res, next) {
+async function isValidNewAsset(req, res, next) {
   try {
-    req.asset = await schema.validateAsync(req.body);
+    req.asset = await createAssetSchema.validateAsync(req.body);
+    next();
+  } catch (error) {
+    next({
+      validationErrors: error.details.map(
+        validationError => validationError.message
+      )
+    });
+  }
+}
+
+async function isValidAmendedAsset(req, res, next) {
+  try {
+    req.asset = await amendAssetSchema.validateAsync(req.body);
     next();
   } catch (error) {
     next({
@@ -42,8 +56,9 @@ module.exports = (router, repository) => {
 
   async function updateAsset(req, res, next) {
     try {
-      const { id, make, model, serial_number } = req.asset;
-      await repository.update(id, { make, model, serial_number });
+      const { id } = req.params;
+      const { make, model, serial_number, asset_number, asset_status, build, nomis_id } = req.asset;
+      await repository.update(id, { make, model, serial_number, asset_number, asset_status, build, nomis_id });
       res.send();
     } catch (error) {
       next(`Failed to amend asset: ${error}`);
@@ -61,8 +76,8 @@ module.exports = (router, repository) => {
   }
 
   router.get("/:id", getAsset);
-  router.post("/", isValidAsset, createAsset);
-  router.put("/", hasValidId, isValidAsset, updateAsset);
+  router.post("/", isValidNewAsset, createAsset);
+  router.put("/:id", hasValidId, isValidAmendedAsset, updateAsset);
   router.delete("/:id", deleteAsset);
 
   return router;
