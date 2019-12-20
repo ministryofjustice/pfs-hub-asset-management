@@ -38,6 +38,21 @@ describe("Name of the group", () => {
     expect(result).toEqual(mockResult);
   });
 
+  it("should fetch 3 records from the database", async () => {
+    // Define the mock implementation for fetch for this instance
+    // Here we're testing the happy path, where a record is returned, what happens if there is no record?
+    const mockResult = "MOCK_RECORD";
+    fetch.mockImplementation(() => new Array(3).fill(mockResult));
+    // Call our code
+    const result = await repo.fetch(1);
+    // Assert our mocks have been called
+    expect(AssetRegister.where).toHaveBeenCalledWith("id", 1);
+    expect(fetch).toHaveBeenCalled();
+    // Assert the result of calling our code is correct
+    expect(result).toBeDefined();
+    expect(result.length).toEqual(3);
+  });
+
   it("should delete a record from the database", async () => {
     await repo.remove(1);
     expect(AssetRegister.where).toHaveBeenCalledWith("id", 1);
